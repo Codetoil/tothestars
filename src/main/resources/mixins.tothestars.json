@@ -1,0 +1,11 @@
+{
+  "package": "io.github.codetoil.tothestars.asm.mixin",
+  "refmap": "mixins.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "GalaxyRegistryMixin",
+    "WorldUtilMixin"
+  ]
+}
