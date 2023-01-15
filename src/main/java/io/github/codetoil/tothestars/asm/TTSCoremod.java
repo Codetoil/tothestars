@@ -6,18 +6,18 @@ import org.spongepowered.asm.mixin.Mixins;
 
 import javax.annotation.Nullable;
 import java.util.Map;
-import micdoodle8.mods.galacticraft.core.util.GalacticLog;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @IFMLLoadingPlugin.SortingIndex(TTSCoremod.SORTINGINDEX)
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 public class TTSCoremod implements IFMLLoadingPlugin {
 	public static final int SORTINGINDEX = 3;
-	public static final GalacticLog logger;
+	public static final Logger logger = LogManager.getLogger("ToTheStars");
 
 	public TTSCoremod() {
 		MixinBootstrap.init();
 		Mixins.addConfiguration("mixins.tothestars.json");
-		logger = new GalacticLog(this);
 	}
 	
 	@Override
