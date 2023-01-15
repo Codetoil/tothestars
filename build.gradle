@@ -7,8 +7,8 @@ buildscript {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = "https://files.minecraftforge.net/maven" }
         maven { url = 'https://repo.spongepowered.org/maven' }
-        jcenter()
         mavenCentral()
+        mavenLocal()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
@@ -37,7 +37,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                examplemod {
+                tothestars {
                     source sourceSets.main
                 }
             }
@@ -48,7 +48,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                examplemod {
+                tothestars {
                     source sourceSets.main
                 }
             }
@@ -79,8 +79,8 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    jcenter()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -103,6 +103,16 @@ configurations {
 mixin {
    config "mixins.tothestars.json"
    add sourceSets.main, "mixins.tothestars.refmap.json"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = ttsBaseName
+
+            from components.java
+        }
+    }
 }
 
 clean {
