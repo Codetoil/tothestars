@@ -9,12 +9,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @Mixin(GalaxyRegistry.class)
 public class GalaxyRegistryMixin {
     @Shadow(remap = false)
-    static HashMap<String, SolarSystem> solarSystems;
+    static Map<String, SolarSystem> solarSystems;
 
     @Inject(method = "getCelestialBodyFromDimensionID(I)Lmicdoodle8/mods/galacticraft/api/galaxies/CelestialBody;", at = @At("RETURN"), remap = false)
     private static void getCelestialBodyFromDimensionID(int dimensionID, CallbackInfoReturnable<CelestialBody> cir){
