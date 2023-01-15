@@ -1,7 +1,6 @@
 package io.github.codetoil.tothestars.asm.mixin;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import micdoodle8.mods.galacticraft.api.galaxies.*;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
@@ -20,16 +19,9 @@ import java.util.stream.Collectors;
 @Mixin(WorldUtil.class)
 public abstract class WorldUtilMixin {
 
-    private static Set<CelestialBody> getRegisteredSunsCB()
+    private static Set<Star> getStars()
     {
-        return getRegisteredSuns().stream()
-                .map(star -> (CelestialBody) star)
-                .collect(Collectors.toSet());
-    }
-
-    private static Set<Star> getRegisteredSuns()
-    {
-        return GalaxyRegistry.getRegisteredSolarSystems().values()
+        return GalaxyRegistry.getSolarSystems()
                 .stream()
                 .map(SolarSystem::getMainStar)
                 .filter(Objects::nonNull)
@@ -40,11 +32,9 @@ public abstract class WorldUtilMixin {
     private static void getPossibleDimensionsForSpaceshipTier(int tier, EntityPlayerMP playerBase, CallbackInfoReturnable<List<Integer>> cir)
     {
         List<Integer> temp = cir.getReturnValue();
-        Collection<SolarSystem> solarSystems = GalaxyRegistry.getRegisteredSolarSystems().values();
-        for(SolarSystem solarSystem : solarSystems)
+        for(Star star : getStars())
         {
-            Star star = solarSystem.getMainStar();
-            if (star.getReachable())
+            if (star.isReachable())
             {
                 if (star.getDimensionID() != -1)
                 {
@@ -70,22 +60,22 @@ public abstract class WorldUtilMixin {
     }
 
     /**
-     * @author Codetoil & The original writer
+     * @author Codetoil & The original writer(s)
      */
     @Overwrite(remap=false)
     public static CelestialBody getReachableCelestialBodiesForDimensionID(int id)
     {
         /* OLD CODE*/
         List<CelestialBody> celestialBodyList = Lists.newArrayList();
-        celestialBodyList.addAll(GalaxyRegistry.getRegisteredMoons().values());
-        celestialBodyList.addAll(GalaxyRegistry.getRegisteredPlanets().values());
-        celestialBodyList.addAll(GalaxyRegistry.getRegisteredSatellites().values());
+        celestialBodyList.addAll(GalaxyRegistry.getMoons());
+        celestialBodyList.addAll(GalaxyRegistry.getPlanets());
+        celestialBodyList.addAll(GalaxyRegistry.getSatellites());
         /* NEW CODE*/
-        celestialBodyList.addAll(getRegisteredSunsCB());
+        celestialBodyList.addAll(getStars());
         /* OLD CODE*/
         for (CelestialBody cBody : celestialBodyList)
         {
-            if (cBody.getReachable())
+            if (cBody.isReachable())
             {
                 if (cBody.getDimensionID() == id)
                 {
@@ -105,16 +95,16 @@ public abstract class WorldUtilMixin {
     {
         /* OLD CODE*/
         List<CelestialBody> celestialBodyList = Lists.newArrayList();
-        celestialBodyList.addAll(GalaxyRegistry.getRegisteredMoons().values());
-        celestialBodyList.addAll(GalaxyRegistry.getRegisteredPlanets().values());
-        celestialBodyList.addAll(GalaxyRegistry.getRegisteredSatellites().values());
+        celestialBodyList.addAll(GalaxyRegistry.getMoons());
+        celestialBodyList.addAll(GalaxyRegistry.getPlanets());
+        celestialBodyList.addAll(GalaxyRegistry.getSatellites());
         /* NEW CODE*/
-        celestialBodyList.addAll(getRegisteredSunsCB());
+        celestialBodyList.addAll(getStars());
 
         /* OLD CODE*/
         for (CelestialBody cBody : celestialBodyList)
         {
-            if (cBody.getReachable())
+            if (cBody.isReachable())
             {
                 if (cBody.getName().equals(name))
                 {
@@ -140,24 +130,24 @@ public abstract class WorldUtilMixin {
         List<List<String>> checklistValues = Lists.newArrayList();
         List<CelestialBody> bodiesDone = Lists.newArrayList();
 
-        for (Planet planet : GalaxyRegistry.getRegisteredPlanets().values())
+        for (Planet planet : GalaxyRegistry.getPlanets())
         {
             insertChecklistEntries(planet, bodiesDone, checklistValues);
         }
 
-        for (Moon moon : GalaxyRegistry.getRegisteredMoons().values())
+        for (Moon moon : GalaxyRegistry.getMoons())
         {
             insertChecklistEntries(moon, bodiesDone, checklistValues);
         }
 
-        for (Satellite satellite : GalaxyRegistry.getRegisteredSatellites().values())
+        for (Satellite satellite : GalaxyRegistry.getSatellites())
         {
             insertChecklistEntries(satellite, bodiesDone, checklistValues);
         }
 
         /* NEW CODE */
 
-        for (Star star : GalaxyRegistry.getRegisteredSolarSystems().values().stream().map(SolarSystem::getMainStar).collect(Collectors.toSet()))
+        for (Star star : getStars())
         {
             insertChecklistEntries(star, bodiesDone, checklistValues);
         }

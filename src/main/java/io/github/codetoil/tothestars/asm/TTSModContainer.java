@@ -6,7 +6,6 @@ import net.minecraftforge.fml.common.LoadController;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @MCVersion("1.12.2")
@@ -18,7 +17,7 @@ public class TTSModContainer extends DummyModContainer
 		ModMetadata meta = this.getMetadata();
 		meta.modId = "tothestars";
 		meta.name = "To The Stars";
-		meta.version = "${version}";
+		meta.version = "0.1.1";
 		meta.description = "Allows you to travel to stars in galacticraft";
 		meta.authorList = Collections.singletonList("Codetoil");
 		meta.url = "";
