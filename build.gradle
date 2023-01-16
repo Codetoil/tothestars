@@ -104,6 +104,7 @@ dependencies {
         exclude group: 'org.apache.logging.log4j', module: 'log4j-core'
     }
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     implementation 'dev.galacticraft:galacticraft-legacy:4.0.4:deobf'
     runtimeOnly fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
@@ -115,7 +116,6 @@ configurations {
 
 mixin {
    config "mixins.tothestars.json"
-   add sourceSets.main, "mixins.tothestars.refmap.json"
 }
 
 publishing {
