@@ -1,66 +1,65 @@
 package io.github.codetoil.tothestars.test;
 
-import io.github.codetoil.tothestars.api.LandableStar;
-import com.google.common.collect.Sets;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.logging.log4j.Logger;
+import io.github.codetoil.tothestars.asm.api.LandableStar;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
-import micdoodle8.mods.galacticraft.api.galaxies.Star;
-import micdoodle8.mods.galacticraft.api.world.EnumAtmosphericGas;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.Constants;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.MaterialLiquid;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProviderEnd;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.Logger;
 
-import java.util.Set;
+@Mod(modid = "test", dependencies = "required-after:galacticraftcore;required-after:tothestars")
+public class Test
+{
+	public static Logger logger;
 
-@Mod(modid="test")
-public class Test {
-    public static Logger logger;
+	@Mod.Instance("test")
+	public static Test instance;
 
-    @Mod.Instance("test")
-    public static Test instance;
+	public static LandableStar starSol;
 
-    public static LandableStar starTest;
+	public static int dimSolId = -5430;
+	public static DimensionType dimSol;
+	public static Biome biomeSolFlat;
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
-        logger = event.getModLog();
-        MinecraftForge.EVENT_BUS.register(this);
-    }
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event)
+	{
+		logger = event.getModLog();
 
-    @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-        starTest = (LandableStar) (new LandableStar("lsol")
-            .setStar(GalacticraftCore.solarSystemSol.getMainStar())
-            .setTierRequired(3));
-        starTest.setDimensionInfo(1, WorldProviderEnd.class);
-        
-    }
+		Test.starSol = new LandableStar("sol").setParentSolarSystem(GalacticraftCore.solarSystemSol);
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
-    }
+		biomeSolFlat = new BiomeSunGenBaseGC(new Biome.BiomeProperties("sol")
+				.setBaseHeight(1.5F)
+				.setHeightVariation(0.4F)
+				.setRainfall(0.0F)
+				.setRainDisabled()
+				.setWaterColor(0xFFFF00)
+				.setTemperature(1.0F));
+
+		Test.starSol.setBiomeInfo(biomeSolFlat);
+	}
+
+	@EventHandler
+	public void init(FMLInitializationEvent event)
+	{
+		Test.starSol.setDimensionInfo(dimSolId, WorldProviderSol.class).setTierRequired(3);
+
+		GalaxyRegistry.register(Test.starSol);
+		GalacticraftRegistry.registerTeleportType(WorldProviderSol.class, new TeleportTypeSol());
+	}
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event)
+	{
+		Test.dimSol = WorldUtil.getDimensionTypeById(dimSolId);
+		GalacticraftCore.solarSystemSol.setMainStar(Test.starSol);
+	}
 
 }

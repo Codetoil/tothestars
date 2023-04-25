@@ -106,8 +106,8 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation 'dev.galacticraft:galacticraft-legacy:4.0.4:deobf'
-    runtimeOnly fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
+    implementation fg.deobf('dev.galacticraft:galacticraft-legacy:4.0.5')
+    runtimeOnly fg.deobf('mezz.jei:jei_1.12.2:4.16.1.301')
 }
 
 configurations {

@@ -11,9 +11,10 @@ import org.apache.logging.log4j.Logger;
 
 @IFMLLoadingPlugin.SortingIndex(TTSCoremod.SORTINGINDEX)
 @IFMLLoadingPlugin.MCVersion("1.12.2")
+@IFMLLoadingPlugin.TransformerExclusions("io.github.codetoil.tothestars.asm")
 public class TTSCoremod implements IFMLLoadingPlugin {
 	public static final int SORTINGINDEX = 3;
-	public static final Logger logger = LogManager.getLogger("ToTheStars");
+	public static final Logger logger = LogManager.getLogger("ToTheStarsCore");
 
 	public TTSCoremod() {
 		MixinBootstrap.init();

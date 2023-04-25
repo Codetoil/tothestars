@@ -2,48 +2,73 @@ package io.github.codetoil.tothestars.asm.mixin;
 
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
-import micdoodle8.mods.galacticraft.api.galaxies.SolarSystem;
-import micdoodle8.mods.galacticraft.core.util.list.CelestialList;
 
+import micdoodle8.mods.galacticraft.api.galaxies.Moon;
+import micdoodle8.mods.galacticraft.api.galaxies.Planet;
+import micdoodle8.mods.galacticraft.api.util.stream.CelestialCollector;
+import micdoodle8.mods.galacticraft.core.util.list.ImmutableCelestialList;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.codetoil.tothestars.api.LandableStar;
-import io.github.codetoil.tothestars.api.StarRegistry;
-
-import java.util.Map;
+import io.github.codetoil.tothestars.asm.api.LandableStar;
+import io.github.codetoil.tothestars.asm.api.StarRegistry;
 
 @Mixin(GalaxyRegistry.class)
-public class GalaxyRegistryMixin {
-    @Shadow(remap = false)
-    static CelestialList<SolarSystem> solarSystems;
+public abstract class GalaxyRegistryMixin {
 
-    @SuppressWarnings("deprecation")
-    @Inject(method = "refreshGalaxies()V", at = @At("RETURN"), remap = false)
-    private static void refreshGalaxies(CallbackInfo ci) {
-        StarRegistry.refreshGalaxies();
+
+    @Shadow(remap = false)
+    public static ImmutableCelestialList<Planet> getPlanets()
+    {
+        return null;
     }
 
-    @SuppressWarnings("deprecation")
-    @Inject(method = "getCelestialBodyFromDimensionID(I)Lmicdoodle8/mods/galacticraft/api/galaxies/CelestialBody;", at = @At("RETURN"), remap = false)
+    @Shadow(remap = false)
+    public static ImmutableCelestialList<Moon> getMoons()
+    {
+        return null;
+    }
+
+    @Inject(method = "refreshGalaxies()V", at = @At("HEAD"), remap = false)
+    private static void refreshGalaxies(CallbackInfo ci) {
+        StarRegistry.refreshLandableStarsInGalaxies();
+    }
+
+    @Inject(method = "getCelestialBodyFromDimensionID(I)Lmicdoodle8/mods/galacticraft/api/galaxies/CelestialBody;", at = @At("RETURN"), remap = false, cancellable = true)
     private static void getCelestialBodyFromDimensionID(int dimensionID, CallbackInfoReturnable<CelestialBody> cir) {
         if (cir.getReturnValue() != null) {
             return;
         }
 
-        cir.setReturnValue(StarRegistry.getCelestialBodyFromDimensionID(dimensionID));
+        cir.setReturnValue(StarRegistry.getLandableStarFromDimensionID(dimensionID));
     }
 
-    @SuppressWarnings("deprecation")
     @Inject(method = "register(Ljava/lang/Object;)V", at = @At("RETURN"), remap = false)
     private static <T> void register(T object, CallbackInfo cir) {
         if (object instanceof LandableStar)
         {
             StarRegistry.registerLandableStar((LandableStar) object);
         }
+    }
+
+    /**
+     * @author Codetoil and Team Galacticraft
+     * @reason List is immutable, so it must be replaced.
+     */
+    @Overwrite(remap = false)
+    public static ImmutableCelestialList<CelestialBody> getAllReachableBodies()
+    {//@noformat
+        assert getPlanets() != null;
+        assert getMoons() != null;
+        return ImmutableCelestialList.from(
+                getPlanets().stream().filter(CelestialBody.filterReachable()).collect(CelestialCollector.toList()),
+                getMoons().stream().filter(CelestialBody.filterReachable()).collect(CelestialCollector.toList()),
+                StarRegistry.getLandableStars().stream().filter(CelestialBody.filterReachable()).collect(CelestialCollector.toList())
+        );
     }
 }

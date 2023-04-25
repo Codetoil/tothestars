@@ -1,38 +1,23 @@
-package io.github.codetoil.tothestars.api;
+package io.github.codetoil.tothestars.asm.api;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import io.github.codetoil.tothestars.asm.TTSCoremod;
-
 import java.util.HashMap;
 
-import micdoodle8.mods.galacticraft.annotations.ReplaceWith;
-import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
-import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.SolarSystem;
 import micdoodle8.mods.galacticraft.core.util.list.ImmutableCelestialList;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProvider;
-import net.minecraftforge.common.DimensionManager;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import micdoodle8.mods.galacticraft.core.util.list.CelestialList;
 
 public class StarRegistry
 {
-    static CelestialList<LandableStar> landableStars = CelestialList.create();
+    private static final CelestialList<LandableStar> landableStars = CelestialList.create();
 
-    static Map<SolarSystem, CelestialList<LandableStar>> solarSystemLandableStarList = new HashMap<>();
+    private static final Map<SolarSystem, CelestialList<LandableStar>> solarSystemLandableStarList = new HashMap<>();
 
-    /**
-     * @ReplaceWith {@link GalaxyRegistry#refreshGalaxies()}
-     */
-    @Deprecated
-    @ReplaceWith("GalaxyRegistry.refreshGalaxies()")
-    public static void refreshGalaxies()
+    public static void refreshLandableStarsInGalaxies()
     {
         solarSystemLandableStarList.clear();
 
@@ -62,22 +47,12 @@ public class StarRegistry
         return null;
     }
 
-    /**
-     * @ReplaceWith {@link GalaxyRegistry#register(T object)}
-     */
-    @Deprecated
-    @ReplaceWith("GalaxyRegistry.register(T object)")
     public static void registerLandableStar(LandableStar star)
     {
         landableStars.add(star);
     }
 
-    /**
-     * @ReplaceWith {@link GalaxyRegistry#getCelestialBodyFromDimensionID(int dimensionID)}
-     */
-    @Deprecated
-    @ReplaceWith("GalaxyRegistry.getCelestialBodyFromDimensionID(int dimensionID)")
-    public static CelestialBody getCelestialBodyFromDimensionID(int dimensionID)
+    public static CelestialBody getLandableStarFromDimensionID(int dimensionID)
     {
         for (LandableStar landableStar : landableStars) {
             if (landableStar.getDimensionID() == dimensionID)
@@ -103,6 +78,6 @@ public class StarRegistry
      */
     public static ImmutableCelestialList<LandableStar> getLandableStars()
     {
-        return landableStars.toImmutableList();
+        return ImmutableCelestialList.of(landableStars);
     }
 }
