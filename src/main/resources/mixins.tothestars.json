@@ -1,6 +1,6 @@
 {
   "package": "io.github.codetoil.tothestars.asm.mixin",
-  "refmap": "mixins.refmap.json",
+  "refmap": "mixin.refmap.json",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",

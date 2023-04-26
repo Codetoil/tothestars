@@ -118,6 +118,14 @@ mixin {
    config "mixins.tothestars.json"
 }
 
+jar {
+    manifest {
+        attributes "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
+        attributes "FMLCorePlugin": "io.github.codetoil.tothestars.asm.TTSCoremod"
+        attributes "FMLCorePluginContainsFMLMod": true
+    }
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
