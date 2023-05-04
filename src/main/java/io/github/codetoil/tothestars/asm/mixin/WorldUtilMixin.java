@@ -5,7 +5,6 @@ import io.github.codetoil.tothestars.asm.api.StarRegistry;
 import io.github.codetoil.tothestars.asm.api.StarWorldUtil;
 import micdoodle8.mods.galacticraft.api.galaxies.*;
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
-import micdoodle8.mods.galacticraft.core.util.ConfigManagerCore;
 import micdoodle8.mods.galacticraft.core.util.WorldUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldProvider;
@@ -55,6 +54,8 @@ public abstract class WorldUtilMixin {
     @Inject(method="getPossibleDimensionsForSpaceshipTier", at = @At("RETURN"), remap = false)
     private static void getPossibleDimensionsForSpaceshipTier(int tier, EntityPlayerMP playerBase, CallbackInfoReturnable<List<Integer>> cir) {
         List<Integer> temp = cir.getReturnValue();
+        if (StarWorldUtil.registeredStars == null) return;
+
         for (Integer element : StarWorldUtil.registeredStars)
         {
             WorldProvider provider = WorldUtil.getProviderForDimensionServer(element);

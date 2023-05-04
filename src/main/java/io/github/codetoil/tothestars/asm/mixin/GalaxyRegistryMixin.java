@@ -1,5 +1,7 @@
 package io.github.codetoil.tothestars.asm.mixin;
 
+import io.github.codetoil.tothestars.asm.api.LandableStar;
+import io.github.codetoil.tothestars.asm.api.StarRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 
@@ -14,9 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import io.github.codetoil.tothestars.asm.api.LandableStar;
-import io.github.codetoil.tothestars.asm.api.StarRegistry;
 
 @Mixin(GalaxyRegistry.class)
 public abstract class GalaxyRegistryMixin {

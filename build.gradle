@@ -11,15 +11,12 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-// MixinGradle:
-apply plugin: 'org.spongepowered.mixin'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
@@ -92,6 +89,7 @@ repositories {
     maven { url = 'https://repo.spongepowered.org/maven' }
     maven { url = 'https://dvs1.progwml6.com/files/maven/' }
     maven { url = 'https://modmaven.dev' }
+    maven { url "https://maven.cleanroommc.com" }
     mavenCentral()
     mavenLocal()
 }
@@ -99,12 +97,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2860"
 
-    implementation('org.spongepowered:mixin:0.8.5') {
-        exclude module: 'launchwrapper'
-        exclude group: 'org.apache.logging.log4j', module: 'log4j-core'
-    }
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation fg.deobf("zone.rong:mixinbooter:7.1")
 
     implementation fg.deobf('dev.galacticraft:galacticraft-legacy:4.0.5')
     runtimeOnly fg.deobf('mezz.jei:jei_1.12.2:4.16.1.301')
@@ -114,13 +107,8 @@ configurations {
     compileOnly.extendsFrom compileRequire
 }
 
-mixin {
-   config "mixins.tothestars.json"
-}
-
 jar {
     manifest {
-        attributes "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
         attributes "FMLCorePlugin": "io.github.codetoil.tothestars.asm.TTSCoremod"
         attributes "FMLCorePluginContainsFMLMod": true
     }

@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
+// Took some boilerplate from HaveASolTime
 @Mod(modid = "test", dependencies = "required-after:galacticraftcore;required-after:tothestars")
 public class Test
 {
