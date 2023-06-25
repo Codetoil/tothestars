@@ -22,7 +22,9 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 version = ttsVersion
 group = ttsGroup
-archivesBaseName = ttsBaseName
+base {
+    archivesName = ttsBaseName
+}
 
 minecraft {
     // Simply re-run your setup task after changing the mappings to update your workspace.
