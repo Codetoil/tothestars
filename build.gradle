@@ -86,7 +86,7 @@ tasks.named('processResources', ProcessResources).configure {
     ]
     inputs.properties replaceProperties
 
-    filesMatching(['mcmod.info', 'io/github/codetoil/tothestars/asm/api/package-info.java']) {
+    filesMatching(['mcmod.info']) {
         expand replaceProperties + [project: project]
     }
 }

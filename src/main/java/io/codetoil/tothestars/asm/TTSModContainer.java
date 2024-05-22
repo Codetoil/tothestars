@@ -22,7 +22,7 @@ public class TTSModContainer extends DummyModContainer
 		ModMetadata meta = this.getMetadata();
 		meta.modId = "tothestarscore";
 		meta.name = "ToTheStars Core";
-		meta.version = "0.1.1";
+		meta.version = "1.1.2";
 		meta.description = "The coremod for ToTheStars";
 		meta.authorList = Collections.singletonList("Codetoil");
 		meta.url = "";
