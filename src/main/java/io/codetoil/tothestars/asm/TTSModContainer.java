@@ -1,16 +1,27 @@
+/*
+ *  Copyright (c) 2020, 2023, 2024 Anthony Michalek (Codetoil)
+ *	This file is part of ToTheStars.
+ *
+ * 	ToTheStars is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ *  Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ *  option) any later version.
+ *
+ * 	ToTheStars is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ *  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU Lesser General Public License for more details.
+ *
+ * 	You should have received a copy of the GNU Lesser General Public License along with Foobar. If not, see
+ *  <https://www.gnu.org/licenses/>.
+ */
+
 package io.codetoil.tothestars.asm;
 
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 import net.minecraftforge.fml.common.DummyModContainer;
 import net.minecraftforge.fml.common.LoadController;
 import net.minecraftforge.fml.common.ModMetadata;
-import net.minecraftforge.fml.common.versioning.ArtifactVersion;
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 @MCVersion("1.12.2")
