@@ -16,8 +16,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class WorldProviderSol extends WorldProviderSpace implements IGalacticraftWorldProvider
-{
+public class WorldProviderSol extends WorldProviderSpace implements IGalacticraftWorldProvider {
     @Override
     public DimensionType getDimensionType() {
         return Test.dimSol;
@@ -74,8 +73,7 @@ public class WorldProviderSol extends WorldProviderSpace implements IGalacticraf
     }
 
     @Override
-    public boolean canCoordinateBeSpawn(int var1, int var2)
-    {
+    public boolean canCoordinateBeSpawn(int var1, int var2) {
         return var1 == 0 && var2 == 0;
     }
 
@@ -102,8 +100,7 @@ public class WorldProviderSol extends WorldProviderSpace implements IGalacticraf
 
     @Override
     public boolean canRespawnHere() {
-        if (EventHandlerGC.bedActivated)
-        {
+        if (EventHandlerGC.bedActivated) {
             EventHandlerGC.bedActivated = false;
             return true;
         }

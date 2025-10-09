@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020, 2023, 2024 Anthony Michalek (Codetoil)
+ *  Copyright (c) 2020, 2023-2025 Anthony Michalek (Codetoil)
  *	This file is part of ToTheStars.
  *
  * 	ToTheStars is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -16,6 +16,10 @@
 
 package io.codetoil.tothestars.asm.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.sugar.Local;
 import io.codetoil.tothestars.asm.api.LandableStar;
 import io.codetoil.tothestars.asm.api.StarRegistry;
 import io.codetoil.tothestars.asm.api.StarWorldUtil;
@@ -27,50 +31,64 @@ import net.minecraft.world.WorldProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.*;
 
 @Mixin(WorldUtil.class)
 public abstract class WorldUtilMixin {
-    @Inject(method = "getReachableCelestialBodiesForDimensionID(I)Lmicdoodle8/mods/galacticraft/api/galaxies/CelestialBody;", at = @At("RETURN"), remap = false, cancellable = true)
-    private static void getReachableCelestialBodiesForDimensionID(int id, CallbackInfoReturnable<CelestialBody> cir) {
-        for (LandableStar cBody : StarRegistry.getLandableStars()) {
-            if (cBody.isReachable()) {
-                if (cBody.getDimensionID() == id) {
-                    cir.setReturnValue(cBody);
+    @WrapMethod(method =
+            "getReachableCelestialBodiesForDimensionID(I)Lmicdoodle8/mods/galacticraft/api/galaxies/CelestialBody;",
+            remap = false)
+    private static CelestialBody getReachableCelestialBodiesForDimensionID(int id, Operation<CelestialBody> operation) {
+        CelestialBody result = operation.call(id);
+
+        for (LandableStar star : StarRegistry.getLandableStars()) {
+            if (star.isReachable()) {
+                if (star.getDimensionID() == id) {
+                    return star;
                 }
             }
         }
+        return result;
     }
 
-    @Inject(method = "getReachableCelestialBodiesForName(Ljava/lang/String;)Lmicdoodle8/mods/galacticraft/api/galaxies/CelestialBody;", at = @At("RETURN"), remap = false, cancellable = true)
-    private static void getReachableCelestialBodiesForName(String name, CallbackInfoReturnable<CelestialBody> cir) {
-        for (CelestialBody cBody : StarRegistry.getLandableStars()) {
-            if (cBody.isReachable()) {
-                if (cBody.getName().equals(name)) {
-                    cir.setReturnValue(cBody);
+    @WrapMethod(method =
+            "getReachableCelestialBodiesForName(Ljava/lang/String;)" +
+                    "Lmicdoodle8/mods/galacticraft/api/galaxies/CelestialBody;",
+            remap = false)
+    private static CelestialBody getReachableCelestialBodiesForName(String name, Operation<CelestialBody> operation) {
+        CelestialBody result = operation.call(name);
+
+        for (CelestialBody star : StarRegistry.getLandableStars()) {
+            if (star.isReachable()) {
+                if (star.getName().equals(name)) {
+                    return star;
                 }
             }
         }
+        return result;
     }
 
-    @Inject(method = "getArrayOfPossibleDimensions(ILnet/minecraft/entity/player/EntityPlayerMP;)Ljava/util/HashMap;", at = @At("RETURN"), remap = false)
-    private static void getArrayOfPossibleDimensions(int tier, EntityPlayerMP playerBase, CallbackInfoReturnable<HashMap<String, Integer>> cir) {
+    @WrapMethod(method = "getArrayOfPossibleDimensions(ILnet/minecraft/entity/player/EntityPlayerMP;)" +
+            "Ljava/util/HashMap;", remap = false)
+    private static HashMap<String, Integer> getArrayOfPossibleDimensions(int tier, EntityPlayerMP playerBase,
+                                                                         Operation<HashMap<String, Integer>> operation) {
+        HashMap<String, Integer> result = operation.call(tier, playerBase);
+
         for (CelestialBody body : StarRegistry.getLandableStars()) {
             if (!body.isReachable()) {
-                cir.getReturnValue().put(body.getTranslatedName() + "*", body.getDimensionID());
+                result.put(body.getTranslatedName() + "*", body.getDimensionID());
             }
         }
+        return result;
     }
 
-    @Inject(method="getPossibleDimensionsForSpaceshipTier", at = @At("RETURN"), remap = false)
-    private static void getPossibleDimensionsForSpaceshipTier(int tier, EntityPlayerMP playerBase, CallbackInfoReturnable<List<Integer>> cir) {
-        List<Integer> temp = cir.getReturnValue();
-        if (StarWorldUtil.registeredStars == null) return;
+    @WrapMethod(method="getPossibleDimensionsForSpaceshipTier", remap = false)
+    private static List<Integer> getPossibleDimensionsForSpaceshipTier(int tier, EntityPlayerMP playerBase,
+                                                                       Operation<List<Integer>> operation) {
+        List<Integer> result = operation.call(tier, playerBase);
+
+        if (StarWorldUtil.registeredStars == null) return result;
 
         for (Integer element : StarWorldUtil.registeredStars)
         {
@@ -82,27 +100,31 @@ public abstract class WorldUtilMixin {
                 {
                     if (((IGalacticraftWorldProvider) provider).canSpaceshipTierPass(tier))
                     {
-                        temp.add(element);
+                        result.add(element);
                     }
                 } else
                 {
-                    temp.add(element);
+                    result.add(element);
                 }
             }
         }
+        return result;
     }
 
     @Shadow(remap = false)
-    private static void insertChecklistEntries(CelestialBody body, List<CelestialBody> bodiesDone, List<List<String>> checklistValues)
+    private static void insertChecklistEntries(CelestialBody body, List<CelestialBody> bodiesDone,
+                                               List<List<String>> checklistValues)
     {
     }
 
-    @Inject(method="getAllChecklistKeys()Ljava/util/List;", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
-    private static void getAllChecklistKeys(CallbackInfoReturnable<List<List<String>>> cir, List<CelestialBody> bodiesDone)
+    @ModifyReturnValue(method = "getAllChecklistKeys()Ljava/util/List;", at = @At("RETURN"), remap = false)
+    private static List<List<String>> getAllChecklistKeys(List<List<String>> result,
+                                                          @Local List<CelestialBody> bodiesDone)
     {
         for (LandableStar star : StarRegistry.getLandableStars())
         {
-            insertChecklistEntries(star, bodiesDone, cir.getReturnValue());
+            insertChecklistEntries(star, bodiesDone, result);
         }
+        return result;
     }
 }

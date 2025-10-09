@@ -13,50 +13,40 @@ import net.minecraft.world.WorldServer;
 
 import java.util.Random;
 
-public class TeleportTypeSol implements ITeleportType
-{
+public class TeleportTypeSol implements ITeleportType {
     @Override
-    public boolean useParachute()
-    {
+    public boolean useParachute() {
         return false;
     }
 
     @Override
-    public Vector3 getPlayerSpawnLocation(WorldServer world, EntityPlayerMP player)
-    {
+    public Vector3 getPlayerSpawnLocation(WorldServer world, EntityPlayerMP player) {
         return new Vector3(0.5, ConfigManagerCore.disableLander ? 250.0 : 900.0, 0.5);
     }
 
     @Override
-    public Vector3 getEntitySpawnLocation(WorldServer world, Entity entity)
-    {
-        return new Vector3(0.5,  900.0, 0.5);
+    public Vector3 getEntitySpawnLocation(WorldServer world, Entity entity) {
+        return new Vector3(0.5, 900.0, 0.5);
     }
 
     @Override
-    public Vector3 getParaChestSpawnLocation(WorldServer world, EntityPlayerMP player, Random rand)
-    {
+    public Vector3 getParaChestSpawnLocation(WorldServer world, EntityPlayerMP player, Random rand) {
         return null;
     }
 
     @Override
-    public void onSpaceDimensionChanged(World newWorld, EntityPlayerMP player, boolean ridingAutoRocket)
-    {
-        if (!ridingAutoRocket && player != null)
-        {
+    public void onSpaceDimensionChanged(World newWorld, EntityPlayerMP player, boolean ridingAutoRocket) {
+        if (!ridingAutoRocket && player != null) {
             GCPlayerStats stats = GCPlayerStats.get(player);
 
-            if (stats.getTeleportCooldown() <= 0)
-            {
-                if (player.capabilities.isFlying)
-                {
+            if (stats.getTeleportCooldown() <= 0) {
+                if (player.capabilities.isFlying) {
                     player.capabilities.isFlying = false;
                 }
 
                 EntityEntryPodVenus lander = new EntityEntryPodVenus(player);
 
-                if (!newWorld.isRemote)
-                {
+                if (!newWorld.isRemote) {
                     boolean previous = CompatibilityManager.forceLoadChunks((WorldServer) newWorld);
                     lander.forceSpawn = true;
                     newWorld.spawnEntity(lander);
@@ -69,8 +59,7 @@ public class TeleportTypeSol implements ITeleportType
     }
 
     @Override
-    public void setupAdventureSpawn(EntityPlayerMP player)
-    {
+    public void setupAdventureSpawn(EntityPlayerMP player) {
 
     }
 }

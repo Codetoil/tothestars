@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020, 2023, 2024 Anthony Michalek (Codetoil)
+ *  Copyright (c) 2020, 2023-2025 Anthony Michalek (Codetoil)
  *	This file is part of ToTheStars.
  *
  * 	ToTheStars is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -14,7 +14,7 @@
  *  <https://www.gnu.org/licenses/>.
  */
 
-@API(apiVersion = "1.1.2", owner = "tothestars", provides = "ToTheStars API")
+@API(apiVersion = "1.1.3", owner = "tothestars", provides = "ToTheStars API")
 package io.codetoil.tothestars.asm.api;
 
 import net.minecraftforge.fml.common.API;

@@ -32,8 +32,7 @@ public class ChunkProviderTestSun extends ChunkProviderBase {
         flatGeneratorInfo.updateLayers();
     }
 
-    public ChunkProviderTestSun(World worldIn, long seed, boolean mapFeaturesEnabled)
-    {
+    public ChunkProviderTestSun(World worldIn, long seed, boolean mapFeaturesEnabled) {
         this.world = worldIn;
         this.worldType = worldIn.getWorldInfo().getTerrainType();
         this.rand = new Random(seed);

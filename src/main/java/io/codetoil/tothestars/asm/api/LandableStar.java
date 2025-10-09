@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020, 2023, 2024 Anthony Michalek (Codetoil)
+ *  Copyright (c) 2020, 2023-2025 Anthony Michalek (Codetoil)
  *	This file is part of ToTheStars.
  *
  * 	ToTheStars is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -23,17 +23,15 @@ import java.util.Objects;
 
 public class LandableStar extends Star {
 
-	public LandableStar(String bodyName) {
-		super(bodyName);
-	}
+    public LandableStar(String bodyName) {
+        super(bodyName);
+    }
 
-	public LandableStar setParentSolarSystem(SolarSystem galaxy)
-	{
-		return (LandableStar) super.setParentSolarSystem(galaxy);
-	}
+    public LandableStar setParentSolarSystem(SolarSystem galaxy) {
+        return (LandableStar) super.setParentSolarSystem(galaxy);
+    }
 
-	public static void addMobToSpawn(String starName, Biome.SpawnListEntry mobData)
-	{
-		Objects.requireNonNull(StarRegistry.getLandableStarFromTranslationkey("star." + starName)).addMobInfo(mobData);
-	}
+    public static void addMobToSpawn(String starName, Biome.SpawnListEntry mobData) {
+        Objects.requireNonNull(StarRegistry.getLandableStarFromTranslationkey("star." + starName)).addMobInfo(mobData);
+    }
 }

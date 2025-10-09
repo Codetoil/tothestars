@@ -16,51 +16,47 @@ import org.apache.logging.log4j.Logger;
 
 // Took some boilerplate from HaveASolTime
 @Mod(modid = "test", dependencies = "required-after:galacticraftcore;required-after:tothestars")
-public class Test
-{
-	public static Logger logger;
+public class Test {
+    public static Logger logger;
 
-	@Mod.Instance("test")
-	public static Test instance;
+    @Mod.Instance("test")
+    public static Test instance;
 
-	public static LandableStar starSol;
+    public static LandableStar starSol;
 
-	public static int dimSolId = -5430;
-	public static DimensionType dimSol;
-	public static Biome biomeSolFlat;
+    public static int dimSolId = -5430;
+    public static DimensionType dimSol;
+    public static Biome biomeSolFlat;
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event)
-	{
-		logger = event.getModLog();
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        logger = event.getModLog();
 
-		Test.starSol = new LandableStar("sol").setParentSolarSystem(GalacticraftCore.solarSystemSol);
+        Test.starSol = new LandableStar("sol").setParentSolarSystem(GalacticraftCore.solarSystemSol);
 
-		biomeSolFlat = new BiomeSunGenBaseGC(new Biome.BiomeProperties("sol")
-				.setBaseHeight(1.5F)
-				.setHeightVariation(0.4F)
-				.setRainfall(0.0F)
-				.setRainDisabled()
-				.setWaterColor(0xFFFF00)
-				.setTemperature(1.0F));
+        biomeSolFlat = new BiomeSunGenBaseGC(new Biome.BiomeProperties("sol")
+                .setBaseHeight(1.5F)
+                .setHeightVariation(0.4F)
+                .setRainfall(0.0F)
+                .setRainDisabled()
+                .setWaterColor(0xFFFF00)
+                .setTemperature(1.0F));
 
-		Test.starSol.setBiomeInfo(biomeSolFlat);
-	}
+        Test.starSol.setBiomeInfo(biomeSolFlat);
+    }
 
-	@EventHandler
-	public void init(FMLInitializationEvent event)
-	{
-		Test.starSol.setDimensionInfo(dimSolId, WorldProviderSol.class).setTierRequired(3);
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        Test.starSol.setDimensionInfo(dimSolId, WorldProviderSol.class).setTierRequired(3);
 
-		GalaxyRegistry.register(Test.starSol);
-		GalacticraftRegistry.registerTeleportType(WorldProviderSol.class, new TeleportTypeSol());
-	}
+        GalaxyRegistry.register(Test.starSol);
+        GalacticraftRegistry.registerTeleportType(WorldProviderSol.class, new TeleportTypeSol());
+    }
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		Test.dimSol = WorldUtil.getDimensionTypeById(dimSolId);
-		GalacticraftCore.solarSystemSol.setMainStar(Test.starSol);
-	}
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        Test.dimSol = WorldUtil.getDimensionTypeById(dimSolId);
+        GalacticraftCore.solarSystemSol.setMainStar(Test.starSol);
+    }
 
 }

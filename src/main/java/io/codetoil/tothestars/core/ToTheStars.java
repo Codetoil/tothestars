@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020, 2023, 2024 Anthony Michalek (Codetoil)
+ *  Copyright (c) 2020, 2023-2025 Anthony Michalek (Codetoil)
  *	This file is part of ToTheStars.
  *
  * 	ToTheStars is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -33,65 +33,54 @@ import org.apache.logging.log4j.Logger;
 import java.util.Arrays;
 
 @Mod(modid = "tothestars", dependencies = "required-after:galacticraftcore")
-public class ToTheStars
-{
-	public static Logger logger;
+public class ToTheStars {
+    public static Logger logger;
 
-	@Mod.Instance("tothestars")
-	public static ToTheStars instance;
+    @Mod.Instance("tothestars")
+    public static ToTheStars instance;
 
-	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event)
-	{
-		logger = event.getModLog();
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        logger = event.getModLog();
 
-	}
+    }
 
-	@Mod.EventHandler
-	public void init(FMLInitializationEvent event)
-	{
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
 
-	}
+    }
 
-	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		for (CelestialBody body : StarRegistry.getLandableStars())
-		{
-			if (body.shouldAutoRegister())
-			{
-				int id = Arrays.binarySearch(ConfigManagerCore.staticLoadDimensions, body.getDimensionID());
-				DimensionType type = GalacticraftRegistry.registerDimension(body.getTranslationKey(), body.getDimensionSuffix(), body.getDimensionID(), body.getWorldProvider(), body.getForceStaticLoad() || id < 0);
-				if (type != null)
-				{
-					body.initialiseMobSpawns();
-				}
-				else
-				{
-					body.setUnreachable();
-					ToTheStars.logger.error("Tried to register dimension for body: " + body.getTranslationKey() + " hit conflict with ID " + body.getDimensionID());
-				}
-			}
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        for (CelestialBody body : StarRegistry.getLandableStars()) {
+            if (body.shouldAutoRegister()) {
+                int id = Arrays.binarySearch(ConfigManagerCore.staticLoadDimensions, body.getDimensionID());
+                DimensionType type = GalacticraftRegistry.registerDimension(body.getTranslationKey(),
+                        body.getDimensionSuffix(), body.getDimensionID(), body.getWorldProvider(),
+                        body.getForceStaticLoad() || id < 0);
+                if (type != null) {
+                    body.initialiseMobSpawns();
+                } else {
+                    body.setUnreachable();
+                    ToTheStars.logger.error("Tried to register dimension for body: {} hit conflict with ID {}",
+                            body.getTranslationKey(), body.getDimensionID());
+                }
+            }
 
-			if (body.getSurfaceBlocks() != null)
-			{
-				TransformerHooks.spawnListAE2_GC.addAll(body.getSurfaceBlocks());
-			}
-		}
-	}
+            if (body.getSurfaceBlocks() != null) {
+                TransformerHooks.spawnListAE2_GC.addAll(body.getSurfaceBlocks());
+            }
+        }
+    }
 
-	@Mod.EventHandler
-	public void onServerStarting(FMLServerStartingEvent event)
-	{
-		for (CelestialBody body : StarRegistry.getLandableStars())
-		{
-			if (body.shouldAutoRegister())
-			{
-				if (!StarWorldUtil.registerStar(body.getDimensionID(), body.isReachable(), 0))
-				{
-					body.setUnreachable();
-				}
-			}
-		}
-	}
+    @Mod.EventHandler
+    public void onServerStarting(FMLServerStartingEvent event) {
+        for (CelestialBody body : StarRegistry.getLandableStars()) {
+            if (body.shouldAutoRegister()) {
+                if (!StarWorldUtil.registerStar(body.getDimensionID(), body.isReachable(), 0)) {
+                    body.setUnreachable();
+                }
+            }
+        }
+    }
 }
