@@ -62,12 +62,23 @@ minecraft {
             // "SCAN": For mods scan.
             // "REGISTRIES": For firing of registry events.
             // "REGISTRYDUMP": For getting the contents of all registries.
-
-            // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'fml.coreMods.load', 'zone.rong.mixinbooter.MixinBooterPlugin,micdoodle8.mods.miccore.MicdoodlePlugin,io.codetoil.tothestars.asm.TTSCoremod'
+            property 'fml.debugAccessTransformer', 'true'
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+
+            mods {
+                tothestars {
+                    source sourceSets.main
+                }
+
+                test {
+                    source sourceSets.test
+                }
+            }
         }
 
         client {
@@ -184,22 +195,27 @@ tasks.named('jar', Jar) {
                 'Specification-Version'   : '1', // We are version 1 of ourselves
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
-                'Implementation-Vendor'   : mod_authors
+                'Implementation-Vendor'   : mod_authors,
+                "FMLCorePlugin"              : "io.codetoil.tothestars.asm.TTSCoremod",
+                "FMLCorePluginContainsFMLMod": true
         ])
-//        attributes['MixinConfigs'] = "${mod_id}.mixins.json"
     }
 }
 
-// Example configuration to allow publishing using the maven-publish plugin
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Codetoil/tothestars")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
     publications {
         register('mavenJava', MavenPublication) {
             artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/mcmodsrepo"
         }
     }
 }
@@ -225,4 +241,16 @@ sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
     it.output.resourcesDir = dir
     it.java.destinationDirectory = dir
+}
+
+clean {
+    def filteredDelete = new HashSet<>()
+    for (def toDelete : getDelete()) {
+        for (def f : file(toDelete).listFiles()) {
+            if (f.getName() != "fg_cache") {
+                filteredDelete.add(f)
+            }
+        }
+    }
+    setDelete(filteredDelete)
 }
