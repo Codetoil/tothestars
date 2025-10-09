@@ -19,6 +19,7 @@ jobs:
           distribution: 'temurin'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew setupCIWorkspace
       - name: publish
         run: ./gradlew publish
         env:

@@ -3,7 +3,7 @@
   "modid": "test",
   "name": "ToTheStarsTest",
   "description": "Test mod for ToTheStars. Licensed under LGPL v3.0 or Later.",
-  "version": "${mod_version}",
+  "version": "1.0",
   "mcversion": "1.12.2",
   "url": "https://codetoil.io",
   "updateUrl": "",
