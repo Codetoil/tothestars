@@ -1,8 +1,9 @@
 {
   "package": "io.codetoil.tothestars.asm.mixin",
-  "refmap": "mixin.refmap.json",
+  "required": true,
   "target": "@env(DEFAULT)",
-  "minVersion": "0.8",
+  "refmap": "${mixin_refmap}",
+  "minVersion": "0.8.7",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "GalaxyRegistryMixin",

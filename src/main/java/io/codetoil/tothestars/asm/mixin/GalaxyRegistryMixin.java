@@ -25,14 +25,9 @@ import io.codetoil.tothestars.asm.api.StarRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 
-import micdoodle8.mods.galacticraft.api.galaxies.Moon;
-import micdoodle8.mods.galacticraft.api.galaxies.Planet;
 import micdoodle8.mods.galacticraft.api.util.stream.CelestialCollector;
-import micdoodle8.mods.galacticraft.core.util.list.CelestialList;
 import micdoodle8.mods.galacticraft.core.util.list.ImmutableCelestialList;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -58,7 +53,7 @@ public abstract class GalaxyRegistryMixin {
     }
 
     @WrapMethod(method = "register(Ljava/lang/Object;)V", remap = false)
-    private static <T> void register(Object object, Operation<Void> operation) {
+    private static void register(Object object, Operation<Void> operation) {
         operation.call(object);
 
         if (object instanceof LandableStar)

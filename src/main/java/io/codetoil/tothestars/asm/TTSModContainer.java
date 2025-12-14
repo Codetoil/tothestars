@@ -39,6 +39,7 @@ public class TTSModContainer extends DummyModContainer {
     }
 
     @Override
+    @SuppressWarnings("UnstableApiUsage")
     public boolean registerBus(EventBus bus, LoadController controller) {
         bus.register(this);
         return true;
